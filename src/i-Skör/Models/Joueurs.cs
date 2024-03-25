@@ -1,11 +1,14 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-
+using System.Collections.Generic;
+using i_Skör.Models;
 public class Joueur : INotifyPropertyChanged
 {
     private int _id;
     private string _nom;
     private string _pseudo;
+    private int _equipeID;
+    private Equipe _equipe; 
 
     public int ID
     {
@@ -23,6 +26,17 @@ public class Joueur : INotifyPropertyChanged
     {
         get => _pseudo;
         set => SetProperty(ref _pseudo, value);
+    }
+
+    public int EquipeID
+    {
+        get => _equipeID;
+        set => SetProperty(ref _equipeID, value);
+    }
+    public Equipe Equipe
+    {
+        get => _equipe;
+        set => SetProperty(ref _equipe, value);
     }
 
     public event PropertyChangedEventHandler PropertyChanged;

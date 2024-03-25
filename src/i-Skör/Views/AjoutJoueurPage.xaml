@@ -24,6 +24,11 @@
                    VerticalOptions="Start" 
                    HorizontalOptions="FillAndExpand" />
 
+            <Label Text="Équipe:" VerticalOptions="Center" HorizontalOptions="Start" />
+            <Picker x:Name="EquipePicker"
+                    ItemsSource="{Binding Equipes}"
+                    ItemDisplayBinding="{Binding Nom}" />
+
             <Button Text="Ajouter le joueur" 
                     VerticalOptions="Start" 
                     HorizontalOptions="FillAndExpand"

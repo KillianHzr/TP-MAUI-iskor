@@ -21,13 +21,21 @@ namespace i_Skör.Views
         {
             string nom = NomJoueurEntry.Text;
             string pseudo = PseudoJoueurEntry.Text;
+            Equipe equipeSelectionnee = EquipePicker.SelectedItem as Equipe;
 
-            var (success, message) = viewModel.AjouterJoueur(nom, pseudo);
+            if (equipeSelectionnee == null)
+            {
+                await DisplayAlert("Erreur", "Veuillez sélectionner une équipe.", "OK");
+                return;
+            }
+
+            var (success, message) = viewModel.AjouterJoueur(nom, pseudo, equipeSelectionnee);
 
             if (success)
             {
                 NomJoueurEntry.Text = string.Empty;
                 PseudoJoueurEntry.Text = string.Empty;
+                EquipePicker.SelectedItem = null;
             }
 
             await DisplayAlert(success ? "Succès" : "Erreur", message, "OK");
@@ -40,10 +48,17 @@ namespace i_Skör.Views
             {
                 string nouveauNom = await DisplayPromptAsync("Modifier Joueur", "Entrez le nouveau nom :", initialValue: joueur.Nom);
                 string nouveauPseudo = await DisplayPromptAsync("Modifier Joueur", "Entrez le nouveau pseudo :", initialValue: joueur.Pseudo);
+                Equipe equipeSelectionnee = EquipePicker.SelectedItem as Equipe;
+
+                if (equipeSelectionnee == null)
+                {
+                    await DisplayAlert("Erreur", "Veuillez sélectionner une équipe.", "OK");
+                    return;
+                }
 
                 if (!string.IsNullOrWhiteSpace(nouveauNom) && !string.IsNullOrWhiteSpace(nouveauPseudo))
                 {
-                    viewModel.ModifierJoueur(joueur, nouveauNom, nouveauPseudo);
+                    viewModel.ModifierJoueur(joueur, nouveauNom, nouveauPseudo, equipeSelectionnee);
                 }
             }
         }

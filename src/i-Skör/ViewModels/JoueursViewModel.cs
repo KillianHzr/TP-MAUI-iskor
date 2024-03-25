@@ -10,8 +10,10 @@ namespace i_Skör.ViewModels
     public class JoueurViewModel : INotifyPropertyChanged
     {
         private Joueur _joueurSelectionne;
+        private Equipe _equipeSelectionnee;
 
         public ObservableCollection<Joueur> Joueurs { get; } = new ObservableCollection<Joueur>();
+        public ObservableCollection<Equipe> Equipes { get; }
 
         public Joueur JoueurSelectionne
         {
@@ -19,21 +21,29 @@ namespace i_Skör.ViewModels
             set => SetProperty(ref _joueurSelectionne, value);
         }
 
+        public Equipe EquipeSelectionnee
+        {
+            get => _equipeSelectionnee;
+            set => SetProperty(ref _equipeSelectionnee, value);
+        }
+
+
         public ICommand AjouterJoueurCommand { get; }
         public ICommand SupprimerJoueurCommand { get; }
         public ICommand ModifierJoueurCommand { get; }
 
         public JoueurViewModel()
         {
-            Joueurs = new ObservableCollection<Joueur>(DataCacheService.Instance.Joueurs);
+            Equipes = new ObservableCollection<Equipe>(DataCacheService.Instance.Equipes);
+
             AjouterJoueurCommand = new Command<(string Nom, string Pseudo)>(tuple =>
-                AjouterJoueur(tuple.Nom, tuple.Pseudo));
+                AjouterJoueur(tuple.Nom, tuple.Pseudo, EquipeSelectionnee));
             SupprimerJoueurCommand = new Command<Joueur>(SupprimerJoueur);
             ModifierJoueurCommand = new Command<(Joueur Joueur, string NouveauNom, string NouveauPseudo)>(tuple =>
-                ModifierJoueur(tuple.Joueur, tuple.NouveauNom, tuple.NouveauPseudo));
+                ModifierJoueur(tuple.Joueur, tuple.NouveauNom, tuple.NouveauPseudo, EquipeSelectionnee));
         }
 
-        public (bool Success, string Message) AjouterJoueur(string nom, string pseudo)
+        public (bool Success, string Message) AjouterJoueur(string nom, string pseudo, Equipe equipe)
         {
             if (string.IsNullOrWhiteSpace(nom))
             {
@@ -45,7 +55,7 @@ namespace i_Skör.ViewModels
                 return (false, "Le champ pseudonyme est vide.");
             }
 
-            var joueur = new Joueur { Nom = nom, Pseudo = pseudo };
+            var joueur = new Joueur { Nom = nom, Pseudo = pseudo, Equipe = equipe };
             Joueurs.Add(joueur);
             DataCacheService.Instance.Joueurs.Add(joueur);
             OnPropertyChanged(nameof(Joueurs));
@@ -69,12 +79,13 @@ namespace i_Skör.ViewModels
         }
 
 
-        public void ModifierJoueur(Joueur joueur, string nouveauNom, string nouveauPseudo)
+        public void ModifierJoueur(Joueur joueur, string nouveauNom, string nouveauPseudo, Equipe equipe)
         {
             if (joueur != null)
             {
                 joueur.Nom = nouveauNom;
                 joueur.Pseudo = nouveauPseudo;
+                joueur.Equipe = equipe;
                 OnPropertyChanged(nameof(Joueurs));
             }
         }
