@@ -1,4 +1,6 @@
-﻿namespace i_Skör
+﻿using i_Skör.Views;
+
+namespace i_Skör
 {
     public partial class MainPage : ContentPage
     {
@@ -19,6 +21,11 @@
                 CounterBtn.Text = $"Clicked {count} times";
 
             SemanticScreenReader.Announce(CounterBtn.Text);
+        }
+
+        private async void OnAjouterEquipeClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new AjoutEquipeView());
         }
     }
 }

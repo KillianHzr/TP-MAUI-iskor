@@ -35,6 +35,9 @@
                 Clicked="OnCounterClicked"
                 HorizontalOptions="Center" />
 
+            <Button Text="Ajouter une Équipe"
+                Clicked="OnAjouterEquipeClicked" />
+
         </VerticalStackLayout>
     </ScrollView>
 

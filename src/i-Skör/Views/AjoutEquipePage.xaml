@@ -1,0 +1,34 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="i_Skör.Views.AjoutEquipeView"
+             Title="Ajouter une Équipe">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="25" Padding="30" VerticalOptions="Start">
+            <Label Text="Nom de l'équipe:" 
+                   VerticalOptions="Center" 
+                   HorizontalOptions="Start" />
+
+            <Entry x:Name="NomEquipeEntry" 
+                   Placeholder="Entrez le nom de l'équipe" 
+                   VerticalOptions="Start" 
+                   HorizontalOptions="FillAndExpand" />
+
+            <Button Text="Créer l'équipe" 
+                    VerticalOptions="Start" 
+                    HorizontalOptions="FillAndExpand"
+                    Clicked="OnCreerEquipeClicked" />
+
+            <CollectionView ItemsSource="{Binding Equipes}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout>
+                            <Label Text="{Binding Nom}" />
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
