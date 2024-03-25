@@ -33,16 +33,26 @@ namespace i_Skör.ViewModels
                 ModifierJoueur(tuple.Joueur, tuple.NouveauNom, tuple.NouveauPseudo));
         }
 
-        public void AjouterJoueur(string nom, string pseudo)
+        public (bool Success, string Message) AjouterJoueur(string nom, string pseudo)
         {
-            if (!string.IsNullOrWhiteSpace(nom) && !string.IsNullOrWhiteSpace(pseudo))
+            if (string.IsNullOrWhiteSpace(nom))
             {
-                var joueur = new Joueur { Nom = nom, Pseudo = pseudo };
-                Joueurs.Add(joueur);
-                DataCacheService.Instance.Joueurs.Add(joueur);
-                OnPropertyChanged(nameof(Joueurs));
+                return (false, "Le champ nom est vide.");
             }
+
+            if (string.IsNullOrWhiteSpace(pseudo))
+            {
+                return (false, "Le champ pseudonyme est vide.");
+            }
+
+            var joueur = new Joueur { Nom = nom, Pseudo = pseudo };
+            Joueurs.Add(joueur);
+            DataCacheService.Instance.Joueurs.Add(joueur);
+            OnPropertyChanged(nameof(Joueurs));
+
+            return (true, "Joueur ajouté avec succès");
         }
+
 
         public void SupprimerJoueur(Joueur joueur)
         {

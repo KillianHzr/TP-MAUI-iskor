@@ -17,19 +17,22 @@ namespace i_Skör.Views
             this.BindingContext = viewModel;
         }
 
-        private void OnAjouterJoueurClicked(object sender, EventArgs e)
+        private async void OnAjouterJoueurClicked(object sender, EventArgs e)
         {
             string nom = NomJoueurEntry.Text;
             string pseudo = PseudoJoueurEntry.Text;
 
-            viewModel.AjouterJoueur(nom, pseudo);
+            var (success, message) = viewModel.AjouterJoueur(nom, pseudo);
 
-            // Réinitialiser les champs après l'ajout
-            NomJoueurEntry.Text = string.Empty;
-            PseudoJoueurEntry.Text = string.Empty;
+            if (success)
+            {
+                NomJoueurEntry.Text = string.Empty;
+                PseudoJoueurEntry.Text = string.Empty;
+            }
 
-            DisplayAlert("Succès", "Joueur ajouté avec succès", "OK");
+            await DisplayAlert(success ? "Succès" : "Erreur", message, "OK");
         }
+
 
         private async void OnModifierJoueurClicked(object sender, EventArgs e)
         {
