@@ -1,49 +1,45 @@
-using i_Skör.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Windows.Input;
+using i_Skör.Models;
 
 namespace i_Skör.ViewModels
 {
     public class EquipeViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<Equipe> Equipes { get; } = new ObservableCollection<Equipe>();
-
         private Equipe _equipe;
 
-        // Propriété Equipe qui gère la notification de modification
+        public ObservableCollection<Equipe> Equipes { get; } = new ObservableCollection<Equipe>();
+        public ObservableCollection<Joueur> Membres { get; } = new ObservableCollection<Joueur>();
+
         public Equipe Equipe
         {
             get => _equipe;
-            set
+            set => SetProperty(ref _equipe, value, onChanged: () =>
             {
-                if (_equipe != value)
+                Membres.Clear();
+                foreach (var membre in _equipe.Membres)
                 {
-                    _equipe = value;
-                    OnPropertyChanged(nameof(Equipe));
-
-                    // Mise à jour de la collection Membres chaque fois que Equipe change
-                    Membres.Clear();
-                    if (_equipe.Membres != null)
-                    {
-                        foreach (var membre in _equipe.Membres)
-                        {
-                            Membres.Add(membre);
-                        }
-                    }
+                    Membres.Add(membre);
                 }
-            }
+            });
         }
 
-        // Collection observable des membres de l'équipe
-        public ObservableCollection<Joueur> Membres { get; } = new ObservableCollection<Joueur>();
+        public ICommand AjouterMembreCommand { get; }
+        public ICommand SupprimerMembreCommand { get; }
+        public ICommand ModifierNomEquipeCommand { get; }
+        public ICommand CreerNouvelleEquipeCommand { get; }
 
         public EquipeViewModel(Equipe equipe)
         {
             Equipe = equipe ?? new Equipe();
+            AjouterMembreCommand = new Command<Joueur>(AjouterMembre);
+            SupprimerMembreCommand = new Command<Joueur>(SupprimerMembre);
+            ModifierNomEquipeCommand = new Command<string>(ModifierNomEquipe);
+            CreerNouvelleEquipeCommand = new Command<string>(CreerNouvelleEquipe);
         }
 
-        // Méthode pour ajouter un membre à l'équipe
         public void AjouterMembre(Joueur joueur)
         {
             if (!Membres.Contains(joueur))
@@ -54,7 +50,6 @@ namespace i_Skör.ViewModels
             }
         }
 
-        // Méthode pour supprimer un membre de l'équipe
         public void SupprimerMembre(Joueur joueur)
         {
             if (Membres.Contains(joueur))
@@ -65,22 +60,13 @@ namespace i_Skör.ViewModels
             }
         }
 
-        // Méthode pour modifier le nom de l'équipe
         public void ModifierNomEquipe(string nouveauNom)
         {
-            if (!string.Equals(Equipe.Nom, nouveauNom))
+            if (_equipe.Nom != nouveauNom)
             {
-                Equipe.Nom = nouveauNom;
+                _equipe.Nom = nouveauNom;
                 OnPropertyChanged(nameof(Equipe));
             }
-        }
-
-        // Implémentation de INotifyPropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public void CreerNouvelleEquipe(string nomEquipe)
@@ -92,5 +78,20 @@ namespace i_Skör.ViewModels
             }
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        protected bool SetProperty<T>(ref T backingStore, T value, [CallerMemberName] string propertyName = "", Action onChanged = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(backingStore, value))
+                return false;
+
+            backingStore = value;
+            onChanged?.Invoke();
+            OnPropertyChanged(propertyName);
+            return true;
+        }
     }
 }

@@ -27,6 +27,8 @@ namespace i_Skör.Views
             // Réinitialiser les champs après l'ajout
             NomJoueurEntry.Text = string.Empty;
             PseudoJoueurEntry.Text = string.Empty;
+
+            DisplayAlert("Succès", "Joueur ajouté avec succès", "OK");
         }
 
         private async void OnModifierJoueurClicked(object sender, EventArgs e)

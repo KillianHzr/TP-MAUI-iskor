@@ -1,103 +1,45 @@
-using i_Skör.Models;
-using i_Skör.Models.Statistiques;
-using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows.Input;
+using i_Skör.Models;
 
 namespace i_Skör.ViewModels
 {
     public class PartieViewModel : INotifyPropertyChanged
     {
         private Partie _partie;
+
+        public ObservableCollection<EquipeViewModel> Equipes { get; } = new ObservableCollection<EquipeViewModel>();
+
         public Partie Partie
         {
             get => _partie;
             set
             {
-                _partie = value;
-                OnPropertyChanged(nameof(Partie));
-                LoadFromModel();
-            }
-        }
-
-        public ObservableCollection<EquipeViewModel> Equipes { get; }
-
-        public int ID
-        {
-            get => Partie.ID;
-            set
-            {
-                if (Partie.ID != value)
+                if (SetProperty(ref _partie, value))
                 {
-                    Partie.ID = value;
-                    OnPropertyChanged(nameof(ID));
+                    LoadFromModel();
                 }
             }
         }
 
-        public DateTime Date
-        {
-            get => Partie.Date;
-            set
-            {
-                if (Partie.Date != value)
-                {
-                    Partie.Date = value;
-                    OnPropertyChanged(nameof(Date));
-                }
-            }
-        }
 
-        public string Jeu
-        {
-            get => Partie.Jeu;
-            set
-            {
-                if (Partie.Jeu != value)
-                {
-                    Partie.Jeu = value;
-                    OnPropertyChanged(nameof(Jeu));
-                }
-            }
-        }
-
-        public string Score
-        {
-            get => Partie.Score;
-            set
-            {
-                if (Partie.Score != value)
-                {
-                    Partie.Score = value;
-                    OnPropertyChanged(nameof(Score));
-                }
-            }
-        }
-
-        public TimeSpan Duree
-        {
-            get => Partie.Statistiques.Duree;
-            set
-            {
-                if (Partie.Statistiques.Duree != value)
-                {
-                    Partie.Statistiques.Duree = value;
-                    OnPropertyChanged(nameof(Duree));
-                }
-            }
-        }
+        public ICommand AjouterEquipeCommand { get; }
+        public ICommand SupprimerEquipeCommand { get; }
 
         public PartieViewModel(Partie partie)
         {
-            _partie = partie ?? throw new ArgumentNullException(nameof(partie));
-            Equipes = new ObservableCollection<EquipeViewModel>();
+            _partie = partie ?? throw new System.ArgumentNullException(nameof(partie));
+            AjouterEquipeCommand = new Command<Equipe>(AjouterEquipe);
+            SupprimerEquipeCommand = new Command<Equipe>(SupprimerEquipe);
             LoadFromModel();
         }
 
-        private void LoadFromModel()
+        public void LoadFromModel()
         {
             Equipes.Clear();
-            foreach (var equipe in Partie.Equipes)
+            foreach (var equipe in _partie.Equipes)
             {
                 Equipes.Add(new EquipeViewModel(equipe));
             }
@@ -115,17 +57,29 @@ namespace i_Skör.ViewModels
 
         public void SupprimerEquipe(Equipe equipe)
         {
-            var equipeViewModelToRemove = Equipes.FirstOrDefault(vm => vm.Equipe.ID == equipe.ID);
-            if (equipeViewModelToRemove != null)
+            var toRemove = Equipes.FirstOrDefault(vm => vm.Equipe == equipe);
+            if (toRemove != null)
             {
                 Partie.Equipes.Remove(equipe);
-                Equipes.Remove(equipeViewModelToRemove);
+                Equipes.Remove(toRemove);
                 OnPropertyChanged(nameof(Equipes));
             }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged(string propertyName) =>
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        protected bool SetProperty<T>(ref T backingStore, T value, [CallerMemberName] string propertyName = "", Action onChanged = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(backingStore, value))
+                return false;
+
+            backingStore = value;
+            onChanged?.Invoke();
+            OnPropertyChanged(propertyName);
+            return true;
+        }
     }
 }

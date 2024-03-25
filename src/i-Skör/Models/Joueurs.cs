@@ -1,18 +1,42 @@
-﻿using i_Skör.Models.Statistiques;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
-namespace i_Skör.Models
+public class Joueur : INotifyPropertyChanged
 {
-    public class Joueur
+    private int _id;
+    private string _nom;
+    private string _pseudo;
+
+    public int ID
     {
-        public int ID { get; set; }
-        public string Nom { get; set; }
-        public string Pseudo { get; set; }
-        public Equipe Equipe { get; set; }
-        public StatistiquesJoueur Statistiques { get; set; }
+        get => _id;
+        set => SetProperty(ref _id, value);
+    }
+
+    public string Nom
+    {
+        get => _nom;
+        set => SetProperty(ref _nom, value);
+    }
+
+    public string Pseudo
+    {
+        get => _pseudo;
+        set => SetProperty(ref _pseudo, value);
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+    protected bool SetProperty<T>(ref T backingStore, T value, [CallerMemberName] string propertyName = "")
+    {
+        if (EqualityComparer<T>.Default.Equals(backingStore, value))
+            return false;
+
+        backingStore = value;
+        OnPropertyChanged(propertyName);
+        return true;
     }
 }
