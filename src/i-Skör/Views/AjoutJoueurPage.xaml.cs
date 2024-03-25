@@ -28,5 +28,34 @@ namespace i_Skör.Views
             NomJoueurEntry.Text = string.Empty;
             PseudoJoueurEntry.Text = string.Empty;
         }
+
+        private async void OnModifierJoueurClicked(object sender, EventArgs e)
+        {
+            if (sender is Button button && button.BindingContext is Joueur joueur)
+            {
+                string nouveauNom = await DisplayPromptAsync("Modifier Joueur", "Entrez le nouveau nom :", initialValue: joueur.Nom);
+                string nouveauPseudo = await DisplayPromptAsync("Modifier Joueur", "Entrez le nouveau pseudo :", initialValue: joueur.Pseudo);
+
+                if (!string.IsNullOrWhiteSpace(nouveauNom) && !string.IsNullOrWhiteSpace(nouveauPseudo))
+                {
+                    viewModel.ModifierJoueur(joueur, nouveauNom, nouveauPseudo);
+                }
+            }
+        }
+
+
+        private async void OnSupprimerJoueurClicked(object sender, EventArgs e)
+        {
+            if (sender is Button button && button.BindingContext is Joueur joueur)
+            {
+                bool confirmDelete = await DisplayAlert("Confirmation", "Voulez-vous vraiment supprimer ce joueur ?", "Oui", "Non");
+                if (confirmDelete)
+                {
+                    viewModel.SupprimerJoueur(joueur);
+                }
+            }
+        }
+
+
     }
 }

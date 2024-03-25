@@ -1,6 +1,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="i_Skör.Views.AjoutJoueurView"
+             x:Name="ThisPage"
              Title="Ajouter un Joueur">
 
     <ScrollView>
@@ -28,18 +29,28 @@
                     HorizontalOptions="FillAndExpand"
                     Clicked="OnAjouterJoueurClicked" />
 
-            <!-- CollectionView pour afficher les joueurs ajoutés -->
             <CollectionView ItemsSource="{Binding Joueurs}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <StackLayout Orientation="Horizontal" Spacing="10">
-                            <Label Text="{Binding Nom}" />
-                            <Label Text="{Binding Pseudo}" />
-                        </StackLayout>
+                        <Grid Padding="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <StackLayout Grid.Column="0" Orientation="Horizontal" Spacing="10">
+                                <Label Text="{Binding Nom}" FontAttributes="Bold" VerticalTextAlignment="Center" />
+                                <Label Text="{Binding Pseudo}" VerticalTextAlignment="Center" />
+                            </StackLayout>
+
+                            <Button Grid.Column="1" Text="Modifier" Clicked="OnModifierJoueurClicked" />
+                            <Button Grid.Column="2" Text="Supprimer" Clicked="OnSupprimerJoueurClicked" />
+
+                        </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

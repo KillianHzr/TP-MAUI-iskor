@@ -28,17 +28,10 @@
                 FontSize="18"
                 HorizontalOptions="Center" />
 
-            <Button
-                x:Name="CounterBtn"
-                Text="Click me"
-                SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="OnCounterClicked"
-                HorizontalOptions="Center" />
-
             <Button Text="Ajouter une Équipe"
                 Clicked="OnAjouterEquipeClicked" />
 
-            <Button Text="Ajouter un joueur neuille"
+            <Button Text="Ajouter un Joueur"
                 Clicked="OnAjouterJoueurClicked" />
 
         </VerticalStackLayout>

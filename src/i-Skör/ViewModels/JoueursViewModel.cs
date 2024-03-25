@@ -7,12 +7,9 @@ namespace i_Skör.ViewModels
 {
     public class JoueurViewModel : INotifyPropertyChanged
     {
-        // Collection de joueurs
         public ObservableCollection<Joueur> Joueurs { get; } = new ObservableCollection<Joueur>();
 
         private Joueur _joueurSelectionne;
-
-        // Joueur sélectionné dans l'interface utilisateur
         public Joueur JoueurSelectionne
         {
             get => _joueurSelectionne;
@@ -30,7 +27,6 @@ namespace i_Skör.ViewModels
         {
         }
 
-        // Ajoute un nouveau joueur à la collection
         public void AjouterJoueur(string nom, string pseudo)
         {
             if (!string.IsNullOrWhiteSpace(nom) && !string.IsNullOrWhiteSpace(pseudo))
@@ -41,29 +37,35 @@ namespace i_Skör.ViewModels
             }
         }
 
-        // Supprime le joueur sélectionné de la collection
-        public void SupprimerJoueur()
+        public void SupprimerJoueur(Joueur joueur)
         {
-            if (JoueurSelectionne != null && Joueurs.Contains(JoueurSelectionne))
+            if (joueur != null && Joueurs.Contains(joueur))
             {
-                Joueurs.Remove(JoueurSelectionne);
-                JoueurSelectionne = null; // Réinitialise le joueur sélectionné
+                Joueurs.Remove(joueur);
+                if (JoueurSelectionne == joueur)
+                {
+                    JoueurSelectionne = null;
+                }
                 OnPropertyChanged(nameof(Joueurs));
             }
         }
 
-        // Met à jour les informations du joueur sélectionné
-        public void ModifierJoueur(string nom, string pseudo)
+
+        public void ModifierJoueur(Joueur joueur, string nouveauNom, string nouveauPseudo)
         {
-            if (JoueurSelectionne != null)
+            var index = Joueurs.IndexOf(joueur);
+            if (index != -1)
             {
-                JoueurSelectionne.Nom = nom;
-                JoueurSelectionne.Pseudo = pseudo;
-                OnPropertyChanged(nameof(JoueurSelectionne));
+                joueur.Nom = nouveauNom;
+                joueur.Pseudo = nouveauPseudo;
+
+                Joueurs[index] = joueur;
+
+                OnPropertyChanged(nameof(Joueurs));
             }
         }
 
-        // Implémentation de INotifyPropertyChanged
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
