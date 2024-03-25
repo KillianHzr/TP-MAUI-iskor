@@ -38,6 +38,9 @@
             <Button Text="Ajouter une Équipe"
                 Clicked="OnAjouterEquipeClicked" />
 
+            <Button Text="Ajouter un joueur neuille"
+                Clicked="OnAjouterJoueurClicked" />
+
         </VerticalStackLayout>
     </ScrollView>
 

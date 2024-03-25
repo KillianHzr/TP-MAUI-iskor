@@ -27,5 +27,10 @@ namespace i_Skör
         {
             await Navigation.PushAsync(new AjoutEquipeView());
         }
+
+        private async void OnAjouterJoueurClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new AjoutJoueurView());
+        }
     }
 }

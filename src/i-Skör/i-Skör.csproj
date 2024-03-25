@@ -54,12 +54,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Views\AjoutJoueurPage.xaml.cs">
+	    <DependentUpon>AjoutJoueurPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\AjoutEquipePage.xaml.cs">
 	    <DependentUpon>AjoutEquipePage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Views\AjoutJoueurPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\AjoutEquipePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

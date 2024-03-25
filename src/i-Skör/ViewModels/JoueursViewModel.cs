@@ -1,58 +1,72 @@
 ﻿using i_Skör.Models;
-using i_Skör.Models.Statistiques;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows.Input;
+using System.Runtime.CompilerServices;
 
 namespace i_Skör.ViewModels
 {
-    public class JoueursViewModel : INotifyPropertyChanged
+    public class JoueurViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<Joueur> Joueurs { get; set; } = new ObservableCollection<Joueur>();
+        // Collection de joueurs
+        public ObservableCollection<Joueur> Joueurs { get; } = new ObservableCollection<Joueur>();
 
-        public ICommand AjouterJoueurCommand { get; private set; }
-        public ICommand MettreAJourJoueurCommand { get; private set; }
-        public ICommand SupprimerJoueurCommand { get; private set; }
+        private Joueur _joueurSelectionne;
 
-        public JoueursViewModel()
+        // Joueur sélectionné dans l'interface utilisateur
+        public Joueur JoueurSelectionne
         {
-            AjouterJoueurCommand = new Command<Joueur>(AjouterJoueur);
-            MettreAJourJoueurCommand = new Command<Joueur>(MettreAJourJoueur);
-            SupprimerJoueurCommand = new Command<Joueur>(SupprimerJoueur);
-        }
-
-        private void AjouterJoueur(Joueur joueur)
-        {
-            Joueurs.Add(joueur);
-            OnPropertyChanged(nameof(Joueurs));
-        }
-
-        private void MettreAJourJoueur(Joueur joueur)
-        {
-            var joueurExistant = Joueurs.FirstOrDefault(j => j.ID == joueur.ID);
-            if (joueurExistant != null)
+            get => _joueurSelectionne;
+            set
             {
-                joueurExistant.Nom = joueur.Nom;
-                joueurExistant.Pseudo = joueur.Pseudo;
-                joueurExistant.Equipe = joueur.Equipe;
+                if (_joueurSelectionne != value)
+                {
+                    _joueurSelectionne = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public JoueurViewModel()
+        {
+        }
+
+        // Ajoute un nouveau joueur à la collection
+        public void AjouterJoueur(string nom, string pseudo)
+        {
+            if (!string.IsNullOrWhiteSpace(nom) && !string.IsNullOrWhiteSpace(pseudo))
+            {
+                Joueur nouveauJoueur = new Joueur { Nom = nom, Pseudo = pseudo };
+                Joueurs.Add(nouveauJoueur);
                 OnPropertyChanged(nameof(Joueurs));
             }
         }
 
-        private void SupprimerJoueur(Joueur joueur)
+        // Supprime le joueur sélectionné de la collection
+        public void SupprimerJoueur()
         {
-            Joueurs.Remove(joueur);
-            OnPropertyChanged(nameof(Joueurs));
+            if (JoueurSelectionne != null && Joueurs.Contains(JoueurSelectionne))
+            {
+                Joueurs.Remove(JoueurSelectionne);
+                JoueurSelectionne = null; // Réinitialise le joueur sélectionné
+                OnPropertyChanged(nameof(Joueurs));
+            }
         }
 
-        public void MettreAJourStatistiquesJoueur(int joueurId, string jeu, StatistiquesJeu nouvellesStatistiques)
+        // Met à jour les informations du joueur sélectionné
+        public void ModifierJoueur(string nom, string pseudo)
         {
-            var joueur = Joueurs.FirstOrDefault(j => j.ID == joueurId);
-            joueur?.Statistiques.AjouterOuMettreAJourStatistiques(jeu, nouvellesStatistiques);
+            if (JoueurSelectionne != null)
+            {
+                JoueurSelectionne.Nom = nom;
+                JoueurSelectionne.Pseudo = pseudo;
+                OnPropertyChanged(nameof(JoueurSelectionne));
+            }
         }
 
+        // Implémentation de INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged(string propertyName)
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

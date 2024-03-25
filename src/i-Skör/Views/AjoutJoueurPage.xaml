@@ -1,0 +1,45 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="i_Skör.Views.AjoutJoueurView"
+             Title="Ajouter un Joueur">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="25" Padding="30" VerticalOptions="Start">
+            <Label Text="Nom du joueur:" 
+                   VerticalOptions="Center" 
+                   HorizontalOptions="Start" />
+
+            <Entry x:Name="NomJoueurEntry" 
+                   Placeholder="Entrez le nom du joueur" 
+                   VerticalOptions="Start" 
+                   HorizontalOptions="FillAndExpand" />
+
+            <Label Text="Pseudo du joueur:" 
+                   VerticalOptions="Center" 
+                   HorizontalOptions="Start" />
+
+            <Entry x:Name="PseudoJoueurEntry" 
+                   Placeholder="Entrez le pseudo du joueur" 
+                   VerticalOptions="Start" 
+                   HorizontalOptions="FillAndExpand" />
+
+            <Button Text="Ajouter le joueur" 
+                    VerticalOptions="Start" 
+                    HorizontalOptions="FillAndExpand"
+                    Clicked="OnAjouterJoueurClicked" />
+
+            <!-- CollectionView pour afficher les joueurs ajoutés -->
+            <CollectionView ItemsSource="{Binding Joueurs}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Orientation="Horizontal" Spacing="10">
+                            <Label Text="{Binding Nom}" />
+                            <Label Text="{Binding Pseudo}" />
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
