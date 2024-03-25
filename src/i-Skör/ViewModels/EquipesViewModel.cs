@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using i_Skör.Models;
+using i_Skör.Services;
 
 namespace i_Skör.ViewModels
 {
@@ -10,7 +11,7 @@ namespace i_Skör.ViewModels
     {
         private Equipe _equipe;
 
-        public ObservableCollection<Equipe> Equipes { get; } = new ObservableCollection<Equipe>();
+        public ObservableCollection<Equipe> Equipes { get; } = new ObservableCollection<Equipe>(DataCacheService.Instance.Equipes);
         public ObservableCollection<Joueur> Membres { get; } = new ObservableCollection<Joueur>();
 
         public Equipe Equipe
@@ -56,6 +57,7 @@ namespace i_Skör.ViewModels
             {
                 Membres.Remove(joueur);
                 _equipe.Membres.Remove(joueur);
+                DataCacheService.Instance.Joueurs.Remove(joueur);
                 OnPropertyChanged(nameof(Membres));
             }
         }
@@ -74,6 +76,7 @@ namespace i_Skör.ViewModels
             if (!string.IsNullOrWhiteSpace(nomEquipe))
             {
                 Equipe nouvelleEquipe = new Equipe { Nom = nomEquipe };
+                DataCacheService.Instance.Equipes.Add(nouvelleEquipe);
                 Equipes.Add(nouvelleEquipe);
             }
         }
