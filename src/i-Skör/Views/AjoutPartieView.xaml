@@ -1,25 +1,53 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="i_Skör.Views.AjoutPartieView"
+             x:Name="ThisPage"
              Title="Ajouter une Partie">
 
     <ScrollView>
         <VerticalStackLayout Spacing="25" Padding="30" VerticalOptions="Start">
-            <Label Text="Équipe A:" VerticalOptions="Center" HorizontalOptions="Start" />
-            <Picker x:Name="EquipeAPicker" ItemsSource="{Binding Equipes}" ItemDisplayBinding="{Binding Nom}" SelectedItem="{Binding EquipeA}" />
+            <Label Text="Date de la partie:"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Start" />
 
-            <Label Text="Score Équipe A:" VerticalOptions="Center" HorizontalOptions="Start" />
-            <Entry x:Name="ScoreEquipeAEntry" Keyboard="Numeric" Text="{Binding ScoreEquipeA, Mode=TwoWay}" />
+            <DatePicker x:Name="DatePartiePicker"
+                        VerticalOptions="Start"
+                        HorizontalOptions="FillAndExpand" />
+
+            <Label Text="Équipe A:" VerticalOptions="Center" HorizontalOptions="Start" />
+            <Picker x:Name="EquipeAPicker"
+                    ItemsSource="{Binding Equipes}"
+                    ItemDisplayBinding="{Binding Nom}" />
+
+            <Label Text="Score de l'équipe A:"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Start" />
+
+            <Entry x:Name="ScoreAPartieEntry"
+                   Placeholder="Entrez le score de l'équipe A"
+                   VerticalOptions="Start"
+                   HorizontalOptions="FillAndExpand" />
 
             <Label Text="Équipe B:" VerticalOptions="Center" HorizontalOptions="Start" />
-            <Picker x:Name="EquipeBPicker" ItemsSource="{Binding Equipes}" ItemDisplayBinding="{Binding Nom}" SelectedItem="{Binding EquipeB}" />
+            <Picker x:Name="EquipeBPicker"
+                    ItemsSource="{Binding Equipes}"
+                    ItemDisplayBinding="{Binding Nom}" />
 
-            <Label Text="Score Équipe B:" VerticalOptions="Center" HorizontalOptions="Start" />
-            <Entry x:Name="ScoreEquipeBEntry" Keyboard="Numeric" Text="{Binding ScoreEquipeB, Mode=TwoWay}" />
+            <Label Text="Score de l'équipe B:"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Start" />
 
-            <Button Text="Ajouter la partie" VerticalOptions="Start" HorizontalOptions="FillAndExpand" Command="{Binding AjouterPartieCommand}" />
+            <Entry x:Name="ScoreBPartieEntry"
+                   Placeholder="Entrez le score de l'équipe B"
+                   VerticalOptions="Start"
+                   HorizontalOptions="FillAndExpand" />
 
-            <CollectionView x:Name="PartiesCollection" ItemsSource="{Binding Parties}">
+            <Button Text="Ajouter la partie"
+                    VerticalOptions="Start"
+                    HorizontalOptions="FillAndExpand"
+                    Clicked="OnAjouterPartieClicked" />
+
+            <CollectionView ItemsSource="{Binding Parties}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Grid Padding="10">
@@ -30,19 +58,15 @@
                             </Grid.ColumnDefinitions>
 
                             <StackLayout Grid.Column="0" Orientation="Horizontal" Spacing="10">
-                                <Label Text="{Binding Equipes[0].Nom}" />
-                                <Label Text=" [" />
-                                <Label Text="{Binding Scores[Equipes[0]]}" />
-                                <!-- Mettez à jour la liaison ici -->
-                                <Label Text="]  -  " />
-                                <Label Text="{Binding Equipes[1].Nom}" />
-                                <Label Text=" [" />
-                                <Label Text="{Binding Scores[Equipes[1]]}" />
-                                <!-- Mettez à jour la liaison ici -->
-                                <Label Text="]" />
+                                <Label Text="{Binding Date, StringFormat='{0:dd/MM/yyyy}'}" FontAttributes="Bold" VerticalTextAlignment="Center" />
+                                <Label Text="{Binding EquipeA.Nom}" VerticalTextAlignment="Center" />
+                                <Label Text="{Binding ScoreA}" VerticalTextAlignment="Center" />
+                                <Label Text="-" VerticalTextAlignment="Center" />
+                                <Label Text="{Binding ScoreB}" VerticalTextAlignment="Center" />
+                                <Label Text="{Binding EquipeB.Nom}" VerticalTextAlignment="Center" />
                             </StackLayout>
 
-                            <Button Grid.Column="2" Text="Supprimer" Command="{Binding BindingContext.SupprimerPartieCommand, Source={x:Reference ThisPage}}" CommandParameter="{Binding .}" />
+
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

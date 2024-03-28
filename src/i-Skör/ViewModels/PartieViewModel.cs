@@ -4,171 +4,112 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using i_Skör.Models;
+using i_Skör.Models.Statistiques;
 using i_Skör.Services;
 
 namespace i_Skör.ViewModels
 {
     public class PartieViewModel : INotifyPropertyChanged
     {
-        private Partie _partie;
-        private ObservableCollection<Equipe> _equipes;
-        private Equipe _equipeA;
-        private Equipe _equipeB;
-        private int _scoreEquipeA;
-        private int _scoreEquipeB;
-        private ObservableCollection<Partie> _parties;
+        private Partie _partieSelectionnee;
+        private Equipe _equipeASelectionnee;
+        private Equipe _equipeBSelectionnee;
 
-        public PartieViewModel(Partie partie = null)
+        public ObservableCollection<Partie> Parties { get; } = new ObservableCollection<Partie>(DataCacheService.Instance.Parties);
+        public ObservableCollection<Equipe> Equipes { get; } = new ObservableCollection<Equipe>(DataCacheService.Instance.Equipes);
+
+        public Partie PartieSelectionnee
         {
-            _partie = partie ?? new Partie();
-            _equipes = new ObservableCollection<Equipe>(DataCacheService.Instance.Equipes);
-            _parties = new ObservableCollection<Partie>(DataCacheService.Instance.Parties);
-
-            AjouterPartieCommand = new Command(AddPartie);
-            SupprimerPartieCommand = new Command<Partie>(DeletePartie);
-            EquipeASelectionneeCommand = new Command<Equipe>(EquipeASelectionnee);
-            EquipeBSelectionneeCommand = new Command<Equipe>(EquipeBSelectionnee);
+            get => _partieSelectionnee;
+            set => SetProperty(ref _partieSelectionnee, value);
         }
 
-        public ObservableCollection<Equipe> Equipes
+        public Equipe EquipeASelectionnee
         {
-            get => _equipes;
-            set
-            {
-                _equipes = value;
-                OnPropertyChanged();
-            }
+            get => _equipeASelectionnee;
+            set => SetProperty(ref _equipeASelectionnee, value);
         }
 
-        public ObservableCollection<Partie> Parties
+        public Equipe EquipeBSelectionnee
         {
-            get => _parties;
-            set
-            {
-                _parties = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public Equipe EquipeA
-        {
-            get => _equipeA;
-            set
-            {
-                _equipeA = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public Equipe EquipeB
-        {
-            get => _equipeB;
-            set
-            {
-                _equipeB = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public int ScoreEquipeA
-        {
-            get => _scoreEquipeA;
-            set
-            {
-                _scoreEquipeA = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public int ScoreEquipeB
-        {
-            get => _scoreEquipeB;
-            set
-            {
-                _scoreEquipeB = value;
-                OnPropertyChanged();
-            }
+            get => _equipeBSelectionnee;
+            set => SetProperty(ref _equipeBSelectionnee, value);
         }
 
         public ICommand AjouterPartieCommand { get; }
         public ICommand SupprimerPartieCommand { get; }
-        public ICommand EquipeASelectionneeCommand { get; }
-        public ICommand EquipeBSelectionneeCommand { get; }
+        public ICommand ModifierPartieCommand { get; }
 
-        private void AddPartie()
+        public PartieViewModel()
         {
-            if (EquipeA == null || EquipeB == null)
+            AjouterPartieCommand = new Command<(DateTime Date, Equipe EquipeA, int ScoreA, Equipe EquipeB, int ScoreB)>(tuple =>
+                AjouterPartie(tuple.Date, tuple.EquipeA, tuple.ScoreA, tuple.EquipeB, tuple.ScoreB));
+            SupprimerPartieCommand = new Command<Partie>(SupprimerPartie);
+            ModifierPartieCommand = new Command<(Partie Partie, DateTime NouvelleDate, Equipe NouvelleEquipeA, int NouveauScoreA, Equipe NouvelleEquipeB, int NouveauScoreB)>(tuple =>
+                ModifierPartie(tuple.Partie, tuple.NouvelleDate, tuple.NouvelleEquipeA, tuple.NouveauScoreA, tuple.NouvelleEquipeB, tuple.NouveauScoreB));
+        }
+
+        public (bool Success, string Message) AjouterPartie(DateTime date, Equipe equipeA, int scoreA, Equipe equipeB, int scoreB)
+        {
+            if (equipeA == null || equipeB == null)
             {
-                return;
+                return (false, "Veuillez sélectionner deux équipes différentes.");
             }
 
-            var nouvellePartie = new Partie
+            if (equipeA == equipeB)
             {
-                Equipes = new List<Equipe> { EquipeA, EquipeB },
-                Scores = new Dictionary<Equipe, int>
-        {
-            { EquipeA, ScoreEquipeA },
-            { EquipeB, ScoreEquipeB }
-        },
-                Date = DateTime.Now
-            };
+                return (false, "Les deux équipes sélectionnées sont identiques.");
+            }
 
-            DataCacheService.Instance.Parties.Add(nouvellePartie);
-            Parties.Add(nouvellePartie);
+            var partie = new Partie { Date = date, EquipeA = equipeA, ScoreA = scoreA, EquipeB = equipeB, ScoreB = scoreB };
+            Parties.Add(partie);
+            DataCacheService.Instance.Parties.Add(partie);
+            OnPropertyChanged(nameof(Parties));
 
-            EquipeA = null;
-            EquipeB = null;
-            ScoreEquipeA = 0;
-            ScoreEquipeB = 0;
-            Parties.Add(_partie);
+            return (true, "Partie ajoutée avec succès");
         }
 
-
-        private void DeletePartie(Partie partie)
+        public void SupprimerPartie(Partie partie)
         {
-            DataCacheService.Instance.Parties.Remove(partie);
-        }
-
-        private void EquipeASelectionnee(Equipe equipe)
-        {
-            EquipeA = equipe;
-        }
-
-        private void EquipeBSelectionnee(Equipe equipe)
-        {
-            EquipeB = equipe;
-        }
-
-        public string ScoreEquipeAString
-        {
-            get
+            if (Parties.Contains(partie))
             {
-                if (_partie != null && _partie.Scores != null && _partie.Scores.ContainsKey(EquipeA))
-                {
-                    return _partie.Scores[EquipeA].ToString();
-                }
-                return string.Empty;
+                Parties.Remove(partie);
+                DataCacheService.Instance.Parties.Remove(partie);
+
+                if (PartieSelectionnee == partie)
+                    PartieSelectionnee = null;
+
+                OnPropertyChanged(nameof(Parties));
             }
         }
 
-        public string ScoreEquipeBString
+        public void ModifierPartie(Partie partie, DateTime nouvelleDate, Equipe nouvelleEquipeA, int nouveauScoreA, Equipe nouvelleEquipeB, int nouveauScoreB)
         {
-            get
+            if (partie != null)
             {
-                if (_partie != null && _partie.Scores != null && _partie.Scores.ContainsKey(EquipeB))
-                {
-                    return _partie.Scores[EquipeB].ToString();
-                }
-                return string.Empty;
+                partie.Date = nouvelleDate;
+                partie.EquipeA = nouvelleEquipeA;
+                partie.ScoreA = nouveauScoreA;
+                partie.EquipeB = nouvelleEquipeB;
+                partie.ScoreB = nouveauScoreB;
+                OnPropertyChanged(nameof(Parties));
             }
         }
-
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        protected bool SetProperty<T>(ref T backingStore, T value, [CallerMemberName] string propertyName = "", Action onChanged = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(backingStore, value))
+                return false;
+
+            backingStore = value;
+            onChanged?.Invoke();
+            OnPropertyChanged(propertyName);
+            return true;
         }
     }
 }
