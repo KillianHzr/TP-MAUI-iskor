@@ -66,6 +66,8 @@
                                 <Label Text="{Binding EquipeB.Nom}" VerticalTextAlignment="Center" />
                             </StackLayout>
 
+                            <Button Grid.Column="1" Text="Modifier" Clicked="OnModifierPartieClicked" />
+                            <Button Grid.Column="2" Text="Supprimer" Clicked="OnSupprimerPartieClicked" />
 
                         </Grid>
                     </DataTemplate>
