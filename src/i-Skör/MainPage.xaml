@@ -2,6 +2,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="i_Skör.MainPage"
              BackgroundColor="#191919">
+    <ContentPage.Resources>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="BackgroundColor" Value="#185ad7" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="FontFamily" Value="Bold" />
+        </Style>
+        <Style x:Key="WhiteButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+            <Setter Property="TextColor" Value="#185ad7" />
+            <Setter Property="BackgroundColor" Value="White" />
+        </Style>
+    </ContentPage.Resources>
 
     <ScrollView>
         <VerticalStackLayout
@@ -18,30 +30,25 @@
                 HorizontalOptions="Center" />
 
             <Button
+                Text="Voir le classement"
+                Style="{StaticResource WhiteButtonStyle}"
+                Clicked="OnVoirClassementClicked" />
+
+            <Button
                 Text="Ajouter une Équipe"
-                TextColor="White"
-                BackgroundColor="#5856D6"
-                CornerRadius="10"
-                FontFamily="Bold"
+                Style="{StaticResource ButtonStyle}"
                 Clicked="OnAjouterEquipeClicked" />
 
             <Button
                 Text="Ajouter un Joueur"
-                TextColor="White"
-                BackgroundColor="#5856D6"
-                CornerRadius="10"
-                FontFamily="Bold"
+                Style="{StaticResource ButtonStyle}"
                 Clicked="OnAjouterJoueurClicked" />
 
             <Button
                 Text="Ajouter une Partie"
-                TextColor="White"
-                BackgroundColor="#5856D6"
-                CornerRadius="10"
-                FontFamily="Bold"
+                Style="{StaticResource ButtonStyle}"
                 Clicked="OnAjouterPartieClicked" />
 
         </VerticalStackLayout>
     </ScrollView>
-
 </ContentPage>

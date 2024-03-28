@@ -3,36 +3,49 @@
              x:Class="i_Skör.Views.AjoutJoueurView"
              x:Name="ThisPage"
              Title="Ajouter un Joueur">
+    <ContentPage.Resources>
+        <Style x:Key="LabelStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="VerticalOptions" Value="Center" />
+            <Setter Property="HorizontalOptions" Value="Start" />
+        </Style>
+        <Style x:Key="EntryStyle" TargetType="Entry">
+            <Setter Property="PlaceholderColor" Value="Gray" />
+            <Setter Property="VerticalOptions" Value="Start" />
+            <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+        </Style>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="BackgroundColor" Value="#185ad7" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="FontFamily" Value="Bold" />
+            <Setter Property="VerticalOptions" Value="Start" />
+            <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+        </Style>
+        <Style x:Key="GridButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+            <Setter Property="BackgroundColor" Value="Transparent" />
+            <Setter Property="TextColor" Value="Black" />
+            <Setter Property="FontFamily" Value="Default" />
+            <Setter Property="CornerRadius" Value="0" />
+        </Style>
+    </ContentPage.Resources>
 
     <ScrollView>
         <VerticalStackLayout Spacing="25" Padding="30" VerticalOptions="Start">
-            <Label Text="Nom du joueur:" 
-                   VerticalOptions="Center" 
-                   HorizontalOptions="Start" />
+            <Label Text="Nom du joueur:" Style="{StaticResource LabelStyle}" />
 
-            <Entry x:Name="NomJoueurEntry" 
-                   Placeholder="Entrez le nom du joueur" 
-                   VerticalOptions="Start" 
-                   HorizontalOptions="FillAndExpand" />
+            <Entry x:Name="NomJoueurEntry" Style="{StaticResource EntryStyle}" />
 
-            <Label Text="Pseudo du joueur:" 
-                   VerticalOptions="Center" 
-                   HorizontalOptions="Start" />
+            <Label Text="Pseudo du joueur:" Style="{StaticResource LabelStyle}" />
 
-            <Entry x:Name="PseudoJoueurEntry" 
-                   Placeholder="Entrez le pseudo du joueur" 
-                   VerticalOptions="Start" 
-                   HorizontalOptions="FillAndExpand" />
+            <Entry x:Name="PseudoJoueurEntry" Style="{StaticResource EntryStyle}" />
 
-            <Label Text="Équipe:" VerticalOptions="Center" HorizontalOptions="Start" />
+            <Label Text="Équipe:" Style="{StaticResource LabelStyle}" />
             <Picker x:Name="EquipePicker"
                     ItemsSource="{Binding Equipes}"
                     ItemDisplayBinding="{Binding Nom}" />
 
-            <Button Text="Ajouter le joueur" 
-                    VerticalOptions="Start" 
-                    HorizontalOptions="FillAndExpand"
-                    Clicked="OnAjouterJoueurClicked" />
+            <Button Text="Ajouter le joueur" Style="{StaticResource ButtonStyle}" Clicked="OnAjouterJoueurClicked" />
 
             <CollectionView ItemsSource="{Binding Joueurs}">
                 <CollectionView.ItemTemplate>
@@ -50,8 +63,8 @@
                                 <Label Text="{Binding Equipe.Nom}" VerticalTextAlignment="Center" />
                             </StackLayout>
 
-                            <Button Grid.Column="1" Text="Modifier" Clicked="OnModifierJoueurClicked" />
-                            <Button Grid.Column="2" Text="Supprimer" Clicked="OnSupprimerJoueurClicked" />
+                            <Button Grid.Column="1" Text="Modifier" Style="{StaticResource GridButtonStyle}" Clicked="OnModifierJoueurClicked" />
+                            <Button Grid.Column="2" Text="Supprimer" Style="{StaticResource GridButtonStyle}" Clicked="OnSupprimerJoueurClicked" />
 
                         </Grid>
                     </DataTemplate>

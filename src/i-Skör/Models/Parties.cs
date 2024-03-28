@@ -76,6 +76,15 @@ namespace i_Skör.Models
             }
         }
 
+        public void IncrementerPartiesGagneesPourEquipeGagnante()
+        {
+            Equipe equipeGagnante = ScoreA > ScoreB ? EquipeA : EquipeB;
+            if (equipeGagnante != null)
+            {
+                equipeGagnante.IncrementerPartiesGagnees();
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

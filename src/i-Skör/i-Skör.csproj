@@ -84,6 +84,9 @@
 	  <Compile Update="Views\AjoutPartieView.xaml.cs">
 	    <DependentUpon>AjoutPartieView.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\ClassementView.xaml.cs">
+	    <DependentUpon>ClassementView.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -94,6 +97,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\AjoutPartieView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ClassementView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

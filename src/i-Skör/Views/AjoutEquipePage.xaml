@@ -2,22 +2,40 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="i_Skör.Views.AjoutEquipeView"
              Title="Ajouter une Équipe">
+    <ContentPage.Resources>
+        <Style x:Key="LabelStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="VerticalOptions" Value="Center" />
+            <Setter Property="HorizontalOptions" Value="Start" />
+        </Style>
+        <Style x:Key="EntryStyle" TargetType="Entry">
+            <Setter Property="PlaceholderColor" Value="Gray" />
+            <Setter Property="VerticalOptions" Value="Start" />
+            <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+        </Style>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="BackgroundColor" Value="#185ad7" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="FontFamily" Value="Bold" />
+            <Setter Property="VerticalOptions" Value="Start" />
+            <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+        </Style>
+        <Style x:Key="GridButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+            <Setter Property="BackgroundColor" Value="Transparent" />
+            <Setter Property="TextColor" Value="Black" />
+            <Setter Property="FontFamily" Value="Default" />
+            <Setter Property="CornerRadius" Value="0" />
+        </Style>
+    </ContentPage.Resources>
 
     <ScrollView>
         <VerticalStackLayout Spacing="25" Padding="30" VerticalOptions="Start">
-            <Label Text="Nom de l'équipe:" 
-                   VerticalOptions="Center" 
-                   HorizontalOptions="Start" />
+            <Label Text="Nom de l'équipe:" Style="{StaticResource LabelStyle}" />
 
-            <Entry x:Name="NomEquipeEntry" 
-                   Placeholder="Entrez le nom de l'équipe" 
-                   VerticalOptions="Start" 
-                   HorizontalOptions="FillAndExpand" />
+            <Entry x:Name="NomEquipeEntry" Style="{StaticResource EntryStyle}" />
 
-            <Button Text="Créer l'équipe" 
-                    VerticalOptions="Start" 
-                    HorizontalOptions="FillAndExpand"
-                    Clicked="OnCreerEquipeClicked" />
+            <Button Text="Créer l'équipe" Style="{StaticResource ButtonStyle}" Clicked="OnCreerEquipeClicked" />
 
             <CollectionView x:Name="EquipesCollection" ItemsSource="{Binding Equipes}">
                 <CollectionView.ItemTemplate>
@@ -30,16 +48,14 @@
                             </Grid.ColumnDefinitions>
 
                             <StackLayout Grid.Column="0" Orientation="Horizontal" Spacing="10">
-                                <Label Text="{Binding Nom}" />
+                                <Label Text="{Binding Nom}" Style="{StaticResource LabelStyle}" />
                             </StackLayout>
-                            <Button Grid.Column="2" Text="Modifier" Clicked="OnModifierEquipeClicked" />
-                            <Button Grid.Column="1" Text="Supprimer" Clicked="OnSupprimerEquipeClicked" />
+                            <Button Grid.Column="2" Text="Modifier" Style="{StaticResource GridButtonStyle}" Clicked="OnModifierEquipeClicked" />
+                            <Button Grid.Column="1" Text="Supprimer" Style="{StaticResource GridButtonStyle}" Clicked="OnSupprimerEquipeClicked" />
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-
-
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

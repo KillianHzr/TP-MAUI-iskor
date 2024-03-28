@@ -23,5 +23,10 @@ namespace i_Skör
         {
             await Navigation.PushAsync(new AjoutPartieView());
         }
+
+        private async void OnVoirClassementClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new ClassementView());
+        }
     }
 }

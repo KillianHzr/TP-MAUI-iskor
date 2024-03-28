@@ -13,5 +13,11 @@ namespace i_Skör.Models
         public string Nom { get; set; }
         public List<Joueur> Membres { get; set; } = new List<Joueur>();
         public StatistiquesEquipe Statistiques { get; set; }
+        public int PartiesGagnees { get; set; }
+
+        public void IncrementerPartiesGagnees()
+        {
+            PartiesGagnees++;
+        }
     }
 }
