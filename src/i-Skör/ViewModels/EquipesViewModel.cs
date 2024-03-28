@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -10,6 +11,12 @@ namespace i_Skör.ViewModels
     public class EquipeViewModel : INotifyPropertyChanged
     {
         private Equipe _equipe;
+        private string _nomEquipe;
+        public string NomEquipe
+        {
+            get => _nomEquipe;
+            set => SetProperty(ref _nomEquipe, value);
+        }
 
         public ObservableCollection<Equipe> Equipes { get; } = new ObservableCollection<Equipe>(DataCacheService.Instance.Equipes);
         public ObservableCollection<Joueur> Membres { get; } = new ObservableCollection<Joueur>();
@@ -27,57 +34,54 @@ namespace i_Skör.ViewModels
             });
         }
 
-        public ICommand AjouterMembreCommand { get; }
-        public ICommand SupprimerMembreCommand { get; }
+        public ICommand SupprimerEquipeCommand { get; }
         public ICommand ModifierNomEquipeCommand { get; }
         public ICommand CreerNouvelleEquipeCommand { get; }
 
         public EquipeViewModel(Equipe equipe)
         {
-            Equipe = equipe ?? new Equipe();
-            AjouterMembreCommand = new Command<Joueur>(AjouterMembre);
-            SupprimerMembreCommand = new Command<Joueur>(SupprimerMembre);
-            ModifierNomEquipeCommand = new Command<string>(ModifierNomEquipe);
+            _equipe = equipe;
+            SupprimerEquipeCommand = new Command<Equipe>(SupprimerEquipe);
+            ModifierNomEquipeCommand = new Command<(Equipe Equipe, string NouveauNom)>(ModifierNomEquipe);
             CreerNouvelleEquipeCommand = new Command<string>(CreerNouvelleEquipe);
         }
 
-        public void AjouterMembre(Joueur joueur)
+        public event EventHandler EquipeModified;
+
+        public void ModifierNomEquipe((Equipe Equipe, string NouveauNom) tuple)
         {
-            if (!Membres.Contains(joueur))
+            if (tuple.Equipe != null && !string.IsNullOrWhiteSpace(tuple.NouveauNom))
             {
-                Membres.Add(joueur);
-                _equipe.Membres.Add(joueur);
-                OnPropertyChanged(nameof(Membres));
+                int index = Equipes.IndexOf(tuple.Equipe);
+                if (index != -1)
+                {
+                    Equipe nouvelleEquipe = new Equipe { ID = tuple.Equipe.ID, Nom = tuple.NouveauNom, Membres = tuple.Equipe.Membres };
+                    Equipes[index] = nouvelleEquipe;
+                    NomEquipe = tuple.NouveauNom;
+                    EquipeModified?.Invoke(this, EventArgs.Empty);
+                }
             }
         }
 
-        public void SupprimerMembre(Joueur joueur)
-        {
-            if (Membres.Contains(joueur))
-            {
-                Membres.Remove(joueur);
-                _equipe.Membres.Remove(joueur);
-                DataCacheService.Instance.Joueurs.Remove(joueur);
-                OnPropertyChanged(nameof(Membres));
-            }
-        }
-
-        public void ModifierNomEquipe(string nouveauNom)
-        {
-            if (_equipe.Nom != nouveauNom)
-            {
-                _equipe.Nom = nouveauNom;
-                OnPropertyChanged(nameof(Equipe));
-            }
-        }
 
         public void CreerNouvelleEquipe(string nomEquipe)
         {
             if (!string.IsNullOrWhiteSpace(nomEquipe))
             {
-                Equipe nouvelleEquipe = new Equipe { Nom = nomEquipe };
+                Equipe nouvelleEquipe = new Equipe { ID = DataCacheService.Instance.Equipes.Count + 1, Nom = nomEquipe };
                 DataCacheService.Instance.Equipes.Add(nouvelleEquipe);
                 Equipes.Add(nouvelleEquipe);
+                OnPropertyChanged(nameof(Equipes));
+            }
+        }
+
+        public void SupprimerEquipe(Equipe equipe)
+        {
+            if (equipe != null)
+            {
+                Equipes.Remove(equipe);
+                DataCacheService.Instance.Equipes.Remove(equipe);
+                OnPropertyChanged(nameof(Equipes)); 
             }
         }
 

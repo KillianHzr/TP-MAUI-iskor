@@ -48,20 +48,36 @@ namespace i_Skör.Views
             {
                 string nouveauNom = await DisplayPromptAsync("Modifier Joueur", "Entrez le nouveau nom :", initialValue: joueur.Nom);
                 string nouveauPseudo = await DisplayPromptAsync("Modifier Joueur", "Entrez le nouveau pseudo :", initialValue: joueur.Pseudo);
-                Equipe equipeSelectionnee = EquipePicker.SelectedItem as Equipe;
 
-                if (equipeSelectionnee == null)
+                Equipe equipeSelectionnee = joueur.Equipe;
+
+                if (string.IsNullOrWhiteSpace(nouveauNom) || string.IsNullOrWhiteSpace(nouveauPseudo))
+                {
+                    await DisplayAlert("Erreur", "Le nom et le pseudo ne peuvent pas être vides.", "OK");
+                    return;
+                }
+
+                var equipeNoms = viewModel.Equipes.Select(eq => eq.Nom).ToArray();
+                var equipeSelectionneeNom = equipeSelectionnee?.Nom ?? ""; // Nom de l'équipe actuelle
+                var indexSelectionne = Array.IndexOf(equipeNoms, equipeSelectionneeNom);
+                var equipeSelectionneeNouveau = await DisplayActionSheet("Sélectionner une équipe", "Annuler", null, equipeNoms);
+
+                if (equipeSelectionneeNouveau == "Annuler")
+                    return;
+
+                var equipeNouvelleSelection = viewModel.Equipes.FirstOrDefault(eq => eq.Nom == equipeSelectionneeNouveau);
+
+                if (equipeNouvelleSelection == null)
                 {
                     await DisplayAlert("Erreur", "Veuillez sélectionner une équipe.", "OK");
                     return;
                 }
 
-                if (!string.IsNullOrWhiteSpace(nouveauNom) && !string.IsNullOrWhiteSpace(nouveauPseudo))
-                {
-                    viewModel.ModifierJoueur(joueur, nouveauNom, nouveauPseudo, equipeSelectionnee);
-                }
+                viewModel.ModifierJoueur(joueur, nouveauNom, nouveauPseudo, equipeNouvelleSelection);
             }
         }
+
+
 
 
         private async void OnSupprimerJoueurClicked(object sender, EventArgs e)
