@@ -47,6 +47,7 @@
                             <StackLayout Grid.Column="0" Orientation="Horizontal" Spacing="10">
                                 <Label Text="{Binding Nom}" FontAttributes="Bold" VerticalTextAlignment="Center" />
                                 <Label Text="{Binding Pseudo}" VerticalTextAlignment="Center" />
+                                <Label Text="{Binding Equipe.Nom}" VerticalTextAlignment="Center" />
                             </StackLayout>
 
                             <Button Grid.Column="1" Text="Modifier" Clicked="OnModifierJoueurClicked" />
