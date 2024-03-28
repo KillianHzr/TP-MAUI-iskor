@@ -81,6 +81,9 @@
 	  <Compile Update="Views\AjoutEquipePage.xaml.cs">
 	    <DependentUpon>AjoutEquipePage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\AjoutPartieView.xaml.cs">
+	    <DependentUpon>AjoutPartieView.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -88,6 +91,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\AjoutEquipePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\AjoutPartieView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

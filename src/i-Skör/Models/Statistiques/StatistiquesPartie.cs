@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using i_Skör.Models;
 
 namespace i_Skör.Models.Statistiques
 {
-    public class StatistiquesPartie : Statistiques
+    public class StatistiquesPartie
     {
-        public TimeSpan Duree { get; set; }
-        public string Score { get; set; }
+        public int Kills { get; set; }
+        public int ObjectifsAtteints { get; set; }
+        // Ajoutez d'autres propriétés spécifiques aux statistiques de partie si nécessaire
     }
-
 }

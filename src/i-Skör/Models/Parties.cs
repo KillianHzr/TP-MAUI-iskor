@@ -1,9 +1,7 @@
-﻿using i_Skör.Models.Statistiques;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using i_Skör.Models;
+using i_Skör.Models.Statistiques;
 
 namespace i_Skör.Models
 {
@@ -13,7 +11,7 @@ namespace i_Skör.Models
         public DateTime Date { get; set; }
         public string Jeu { get; set; }
         public List<Equipe> Equipes { get; set; } = new List<Equipe>();
-        public string Score { get; set; }
+        public Dictionary<Equipe, int> Scores { get; set; } = new Dictionary<Equipe, int>();
         public StatistiquesPartie Statistiques { get; set; }
     }
 }

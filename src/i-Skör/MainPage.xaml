@@ -33,6 +33,14 @@
                 FontFamily="Bold"
                 Clicked="OnAjouterJoueurClicked" />
 
+            <Button
+                Text="Ajouter une Partie"
+                TextColor="White"
+                BackgroundColor="#5856D6"
+                CornerRadius="10"
+                FontFamily="Bold"
+                Clicked="OnAjouterPartieClicked" />
+
         </VerticalStackLayout>
     </ScrollView>
 

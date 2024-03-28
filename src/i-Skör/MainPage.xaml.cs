@@ -4,8 +4,6 @@ namespace i_Skör
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
-
         public MainPage()
         {
             InitializeComponent();
@@ -19,6 +17,11 @@ namespace i_Skör
         private async void OnAjouterJoueurClicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new AjoutJoueurView());
+        }
+
+        private async void OnAjouterPartieClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new AjoutPartieView());
         }
     }
 }

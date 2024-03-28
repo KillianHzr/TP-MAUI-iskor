@@ -1,0 +1,52 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="i_Skör.Views.AjoutPartieView"
+             Title="Ajouter une Partie">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="25" Padding="30" VerticalOptions="Start">
+            <Label Text="Équipe A:" VerticalOptions="Center" HorizontalOptions="Start" />
+            <Picker x:Name="EquipeAPicker" ItemsSource="{Binding Equipes}" ItemDisplayBinding="{Binding Nom}" SelectedItem="{Binding EquipeA}" />
+
+            <Label Text="Score Équipe A:" VerticalOptions="Center" HorizontalOptions="Start" />
+            <Entry x:Name="ScoreEquipeAEntry" Keyboard="Numeric" Text="{Binding ScoreEquipeA, Mode=TwoWay}" />
+
+            <Label Text="Équipe B:" VerticalOptions="Center" HorizontalOptions="Start" />
+            <Picker x:Name="EquipeBPicker" ItemsSource="{Binding Equipes}" ItemDisplayBinding="{Binding Nom}" SelectedItem="{Binding EquipeB}" />
+
+            <Label Text="Score Équipe B:" VerticalOptions="Center" HorizontalOptions="Start" />
+            <Entry x:Name="ScoreEquipeBEntry" Keyboard="Numeric" Text="{Binding ScoreEquipeB, Mode=TwoWay}" />
+
+            <Button Text="Ajouter la partie" VerticalOptions="Start" HorizontalOptions="FillAndExpand" Command="{Binding AjouterPartieCommand}" />
+
+            <CollectionView x:Name="PartiesCollection" ItemsSource="{Binding Parties}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <StackLayout Grid.Column="0" Orientation="Horizontal" Spacing="10">
+                                <Label Text="{Binding Equipes[0].Nom}" />
+                                <Label Text=" [" />
+                                <Label Text="{Binding Scores[Equipes[0]]}" />
+                                <!-- Mettez à jour la liaison ici -->
+                                <Label Text="]  -  " />
+                                <Label Text="{Binding Equipes[1].Nom}" />
+                                <Label Text=" [" />
+                                <Label Text="{Binding Scores[Equipes[1]]}" />
+                                <!-- Mettez à jour la liaison ici -->
+                                <Label Text="]" />
+                            </StackLayout>
+
+                            <Button Grid.Column="2" Text="Supprimer" Command="{Binding BindingContext.SupprimerPartieCommand, Source={x:Reference ThisPage}}" CommandParameter="{Binding .}" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
