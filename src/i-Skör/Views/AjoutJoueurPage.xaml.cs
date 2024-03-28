@@ -2,7 +2,7 @@ using Microsoft.Maui.Controls;
 using i_Skör.ViewModels;
 using i_Skör.Models;
 using System;
-
+using System.Linq;
 
 namespace i_Skör.Views
 {
@@ -41,7 +41,6 @@ namespace i_Skör.Views
             await DisplayAlert(success ? "Succès" : "Erreur", message, "OK");
         }
 
-
         private async void OnModifierJoueurClicked(object sender, EventArgs e)
         {
             if (sender is Button button && button.BindingContext is Joueur joueur)
@@ -77,9 +76,6 @@ namespace i_Skör.Views
             }
         }
 
-
-
-
         private async void OnSupprimerJoueurClicked(object sender, EventArgs e)
         {
             if (sender is Button button && button.BindingContext is Joueur joueur)
@@ -91,7 +87,5 @@ namespace i_Skör.Views
                 }
             }
         }
-
-
     }
 }

@@ -1,21 +1,22 @@
-    using i_Skör.Models;
-    using i_Skör.ViewModels;
-    using Microsoft.Maui.Controls;
-    using System;
+using i_Skör.Models;
+using i_Skör.ViewModels;
+using Microsoft.Maui.Controls;
+using System;
+using System.Linq;
 
-    namespace i_Skör.Views
+namespace i_Skör.Views
+{
+    public partial class AjoutEquipeView : ContentPage
     {
-        public partial class AjoutEquipeView : ContentPage
-        {
-            private EquipeViewModel viewModel;
-            public CollectionView EquipesCollectionView => EquipesCollection;
+        private EquipeViewModel viewModel;
+        public CollectionView EquipesCollectionView => EquipesCollection;
 
-            public AjoutEquipeView()
-            {
-                InitializeComponent();
-                viewModel = new EquipeViewModel(new Equipe());
-                this.BindingContext = viewModel;
-            }
+        public AjoutEquipeView()
+        {
+            InitializeComponent();
+            viewModel = new EquipeViewModel(new Equipe());
+            this.BindingContext = viewModel;
+        }
 
         private void OnCreerEquipeClicked(object sender, EventArgs e)
         {
@@ -33,16 +34,16 @@
         }
 
         private async void OnSupprimerEquipeClicked(object sender, EventArgs e)
+        {
+            if (sender is Button button && button.BindingContext is Equipe equipe)
             {
-                if (sender is Button button && button.BindingContext is Equipe equipe)
+                bool confirmDelete = await DisplayAlert("Confirmation", "Voulez-vous vraiment supprimer cette équipe ?", "Oui", "Non");
+                if (confirmDelete)
                 {
-                    bool confirmDelete = await DisplayAlert("Confirmation", "Voulez-vous vraiment supprimer cette équipe ?", "Oui", "Non");
-                    if (confirmDelete)
-                    {
-                        viewModel.SupprimerEquipe(equipe);
-                    }
+                    viewModel.SupprimerEquipe(equipe);
                 }
             }
+        }
 
         private async void OnModifierEquipeClicked(object sender, EventArgs e)
         {
@@ -53,7 +54,7 @@
                 if (!string.IsNullOrWhiteSpace(nouveauNom))
                 {
                     viewModel.ModifierNomEquipe((equipe, nouveauNom));
-                    viewModel.NomEquipe = nouveauNom; 
+                    viewModel.NomEquipe = nouveauNom;
                 }
             }
         }
