@@ -1,66 +1,86 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using i_Skör.Models;
-using i_Skör.Models.Statistiques;
 
 namespace i_Skör.Models
 {
-    public class Partie
+    public class Partie : INotifyPropertyChanged
     {
-        private int _id;
         private DateTime _date;
-        private Equipe _equipea;
-        private int _scorea;
-        private Equipe _equipeb;
-        private int _scoreb;
-
-        public int ID
-        {
-            get => _id;
-            set => SetProperty(ref _id, value);
-        }
         public DateTime Date
         {
             get => _date;
-            set => SetProperty(ref _date, value);
-        }
-        public Equipe EquipeA
-        {
-            get => _equipea;
-            set => SetProperty(ref _equipea, value);
-        }
-        public int ScoreA
-        {
-            get => _scorea;
-            set => SetProperty(ref _scorea, value);
-        }
-        public Equipe EquipeB
-        {
-            get => _equipeb;
-            set => SetProperty(ref _equipeb, value);
-        }
-        public int ScoreB
-        {
-            get => _scoreb;
-            set => SetProperty(ref _scoreb, value);
+            set
+            {
+                if (_date != value)
+                {
+                    _date = value;
+                    OnPropertyChanged(nameof(Date));
+                }
+            }
         }
 
+        private Equipe _equipeA;
+        public Equipe EquipeA
+        {
+            get => _equipeA;
+            set
+            {
+                if (_equipeA != value)
+                {
+                    _equipeA = value;
+                    OnPropertyChanged(nameof(EquipeA));
+                }
+            }
+        }
+
+        private int _scoreA;
+        public int ScoreA
+        {
+            get => _scoreA;
+            set
+            {
+                if (_scoreA != value)
+                {
+                    _scoreA = value;
+                    OnPropertyChanged(nameof(ScoreA));
+                }
+            }
+        }
+
+        private Equipe _equipeB;
+        public Equipe EquipeB
+        {
+            get => _equipeB;
+            set
+            {
+                if (_equipeB != value)
+                {
+                    _equipeB = value;
+                    OnPropertyChanged(nameof(EquipeB));
+                }
+            }
+        }
+
+        private int _scoreB;
+        public int ScoreB
+        {
+            get => _scoreB;
+            set
+            {
+                if (_scoreB != value)
+                {
+                    _scoreB = value;
+                    OnPropertyChanged(nameof(ScoreB));
+                }
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
-        protected bool SetProperty<T>(ref T backingStore, T value, [CallerMemberName] string propertyName = "")
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            if (EqualityComparer<T>.Default.Equals(backingStore, value))
-                return false;
-
-            backingStore = value;
-            OnPropertyChanged(propertyName);
-            return true;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

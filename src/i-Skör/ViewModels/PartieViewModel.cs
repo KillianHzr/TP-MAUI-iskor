@@ -87,14 +87,15 @@ namespace i_Skör.ViewModels
         {
             if (partie != null)
             {
-                partie.Date = nouvelleDate;
-                partie.EquipeA = nouvelleEquipeA;
-                partie.ScoreA = nouveauScoreA;
-                partie.EquipeB = nouvelleEquipeB;
-                partie.ScoreB = nouveauScoreB;
+                var index = Parties.IndexOf(partie);
+                var nouvellePartie = new Partie { Date = nouvelleDate, EquipeA = nouvelleEquipeA, ScoreA = nouveauScoreA, EquipeB = nouvelleEquipeB, ScoreB = nouveauScoreB };
+                Parties[index] = nouvellePartie;
+                DataCacheService.Instance.Parties[index] = nouvellePartie;
                 OnPropertyChanged(nameof(Parties));
             }
         }
+
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 
