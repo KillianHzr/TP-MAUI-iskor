@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -12,8 +13,8 @@ namespace i_Skör.ViewModels
         private Joueur _joueurSelectionne;
         private Equipe _equipeSelectionnee;
 
-        public ObservableCollection<Joueur> Joueurs { get; } = new ObservableCollection<Joueur>();
-        public ObservableCollection<Equipe> Equipes { get; }
+        public ObservableCollection<Joueur> Joueurs { get; } = new ObservableCollection<Joueur>(DataCacheService.Instance.Joueurs);
+        public ObservableCollection<Equipe> Equipes { get; } = new ObservableCollection<Equipe>(DataCacheService.Instance.Equipes);
 
         public Joueur JoueurSelectionne
         {
@@ -27,15 +28,12 @@ namespace i_Skör.ViewModels
             set => SetProperty(ref _equipeSelectionnee, value);
         }
 
-
         public ICommand AjouterJoueurCommand { get; }
         public ICommand SupprimerJoueurCommand { get; }
         public ICommand ModifierJoueurCommand { get; }
 
         public JoueurViewModel()
         {
-            Equipes = new ObservableCollection<Equipe>(DataCacheService.Instance.Equipes);
-
             AjouterJoueurCommand = new Command<(string Nom, string Pseudo)>(tuple =>
                 AjouterJoueur(tuple.Nom, tuple.Pseudo, EquipeSelectionnee));
             SupprimerJoueurCommand = new Command<Joueur>(SupprimerJoueur);
@@ -63,7 +61,6 @@ namespace i_Skör.ViewModels
             return (true, "Joueur ajouté avec succès");
         }
 
-
         public void SupprimerJoueur(Joueur joueur)
         {
             if (Joueurs.Contains(joueur))
@@ -77,7 +74,6 @@ namespace i_Skör.ViewModels
                 OnPropertyChanged(nameof(Joueurs));
             }
         }
-
 
         public void ModifierJoueur(Joueur joueur, string nouveauNom, string nouveauPseudo, Equipe equipe)
         {

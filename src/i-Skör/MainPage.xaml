@@ -1,7 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="i_Skör.MainPage">
+             x:Class="i_Skör.MainPage"
+             BackgroundColor="#191919">
 
     <ScrollView>
         <VerticalStackLayout
@@ -9,29 +9,28 @@
             Padding="30,0"
             VerticalOptions="Center">
 
-            <Image
-                Source="dotnet_bot.png"
-                SemanticProperties.Description="Cute dot net bot waving hi to you!"
-                HeightRequest="200"
-                HorizontalOptions="Center" />
-
             <Label
-                Text="Hello, World!"
+                Text="Bienvenue sur Iskör!"
                 SemanticProperties.HeadingLevel="Level1"
                 FontSize="32"
+                TextColor="White"
+                FontFamily="Bold"
                 HorizontalOptions="Center" />
 
-            <Label
-                Text="Welcome to .NET Multi-platform App UI"
-                SemanticProperties.HeadingLevel="Level2"
-                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
-                FontSize="18"
-                HorizontalOptions="Center" />
-
-            <Button Text="Ajouter une Équipe"
+            <Button
+                Text="Ajouter une Équipe"
+                TextColor="White"
+                BackgroundColor="#5856D6"
+                CornerRadius="10"
+                FontFamily="Bold"
                 Clicked="OnAjouterEquipeClicked" />
 
-            <Button Text="Ajouter un Joueur"
+            <Button
+                Text="Ajouter un Joueur"
+                TextColor="White"
+                BackgroundColor="#5856D6"
+                CornerRadius="10"
+                FontFamily="Bold"
                 Clicked="OnAjouterJoueurClicked" />
 
         </VerticalStackLayout>
